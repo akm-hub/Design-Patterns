@@ -24,24 +24,24 @@ class Interpreter {
 
  public:
     Interpreter();
-    Interpreter(bool);  /// to avoid infinite recursion of constructor calls
+    explicit Interpreter(bool);  /// to avoid infinite recursion of constructor calls
 
     int interpret(const string&);  /// interpret() for client
-    virtual void interpret(string &input, int &total);
+    virtual void interpret(string &input, int &total);  /// non-const parameters
 
  protected:
-    virtual string one() {};
-    virtual string four() {};
-    virtual string five() {};
-    virtual string nine() {};
-    virtual int multiplier() {};
+    virtual string one() {}
+    virtual string four() {}
+    virtual string five() {}
+    virtual string nine() {}
+    virtual int multiplier() {}
 };
 
 class Thousand: public Interpreter {
  public:
-    /// provide parameterized constructor to 
+    /// provide parameterized constructor to
     /// avoid infinite loop in base class constructor
-    Thousand(int): Interpreter(false){}
+    explicit Thousand(int): Interpreter(false) {}
  protected:
     string one() {
         return "M";
@@ -62,7 +62,7 @@ class Thousand: public Interpreter {
 
 class Hundred: public Interpreter {
  public:
-    Hundred(int) : Interpreter(false){}
+    explicit Hundred(int) : Interpreter(false) {}
  protected:
     string one() {
         return "C";
@@ -82,9 +82,9 @@ class Hundred: public Interpreter {
 };
 
 class Ten: public Interpreter {
-  public:
-    Ten(int): Interpreter(false){}
-  protected:
+ public:
+    explicit Ten(int): Interpreter(false) {}
+ protected:
     string one() {
         return "X";
     }
@@ -104,7 +104,7 @@ class Ten: public Interpreter {
 
 class One: public Interpreter {
  public:
-    One(int): Interpreter(false){}
+    explicit One(int): Interpreter(false) {}
  protected:
     string one() {
         return "I";
@@ -150,7 +150,7 @@ void Interpreter::interpret(string& input, int &total) {
         } else {
             index = 0;
         }
-  
+
         for (int end = index + 3; index < end; index++) {
             if (!input.compare(index, 1, one())) {
                 total += 1 * multiplier();
